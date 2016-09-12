@@ -1,0 +1,11 @@
+
+
+$bootstrap-sass-asset-helper: true;
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+@import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+
+//borderless panels
+@panel-border-radius:       0px;
+@border-radius-base:        0px;
+@border-radius-large:       0px;
+@border-radius-small:       0px;
