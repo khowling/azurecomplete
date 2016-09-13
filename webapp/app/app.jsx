@@ -15,73 +15,85 @@ export default class App extends Component {
      console.log ('App: constructor');
      this.server = new Server(props.buildprops.server_url);
      this.state = { 
-       booted: true, 
-       booterr: false,  
-       bootmsg: "not booted", 
-       customers: [],
-       cust: 0, order_wait: 0, order_done: 0, order_inprog: 0,
+       customers: [], orders: [],
+       cust: 0, order_QUEUED: 0, order_COMPLETE: 0, order_INPROGRESS: 0,
        eventlists: {workflowrunning: [], current_client: []},
-       alldatafromserver: [],
-       connections: new Map()};
+    };
    }
 
    
   componentWillMount() {
-    this.server._callServer('/customers').then ((customers) => {
+    this._updateCustomers()
+    this._updateOrders()
+  }
+  _updateCustomers() {
+    return this.server._callServer('/customer').then ((customers) => {
       console.log (`got customers ${customers.length}`)
       this.setState({customers: customers, cust: customers.length})
+    });
+  }
+  _updateOrders() {
+    return this.server._callServer('/orders').then ((orders) => {
+      console.log (`got orders ${orders.length}`)
+
+      this.setState({orders: orders, 
+            order_QUEUED: orders.filter((o) => o.status === 'QUEUED').length,
+            order_COMPLETE: orders.filter((o) => o.status === 'COMPLETE').length,
+            order_INPROGRESS: orders.filter((o) => o.status === 'INPROGRESS').length})
     });
   }
 
   // checkout https://facebook.github.io/react/docs/update.html
   _createOrder(customer, ref) {
     console.log(customer, ref)
-    this.server._callServer('/order', 'POST', {"custId": "C0001"}).then (({tracking_id}) => {
-      this.setState({eventlists: update (this.state.eventlists, {['workflowrunning']: {$push:[{tracking_id: tracking_id, status: 'Submitted'}]}})})
+    this.server._callServer('/order', 'POST', {"custId": customer, "ref": ref}).then ((tracking_ids) => {
+      this.setState({eventlists: update (this.state.eventlists, {['workflowrunning']: {$push:tracking_ids}})})
+      this._updateOrders()
+    });
+  }
+
+  _deleteOrder(customer, ref) {
+    console.log(`_deleteOrder ${JSON.stringify(customer)} ${ref}`)
+    this.server._callServer('/delorder', 'POST', {"custId": customer, "ref": ref}).then (() => {
+      this._updateOrders()
     });
   }
 
 
    render () {
-     console.log ('app render');
-     if (this.state.booted)  return (
-         <div className="col-sm-12  col-lg-12 main">
-            <div>Connected received ping: {this.state.ping} ({this.state.looptimes})</div>
-
-              <button type="button" className="btn btn-primary" onClick={this._createOrder.bind(this)}>Create Order</button>
+     return (
+         <div className="container">
 
             <div className="row">
-            {false && this.state.alldatafromserver.map ((v,i) => {
-              return <div key={ 'a'+i }> val {JSON.stringify(v)}</div>;
-            })}
+              <div className="col-xs-12 col-md-12">
+                <div className="row">
+                  <Glass icon="male-user" qty={this.state.cust} title="Customers" color="blue"/>
+                  <Glass icon="empty-message" qty={this.state.order_QUEUED} title="Orders Queued" color="orange"/>
+                  <Glass icon="app-window-with-content" qty={this.state.order_COMPLETE} title="PDFs Generated" color="teal"/>
+                  <Glass icon="bag" qty={this.state.order_INPROGRESS} title="Orders in Progress" color="red"/>
+                </div>
+              </div>
+            </div>
 
-            </div>
             <div className="row">
-              <div className="col-xs-10 col-md-5">
-                <Glass cust={this.state.cust} order_wait={this.state.order_wait}   order_done={this.state.order_done}  order_inprog={this.state.order_inprog}/>
-              </div>
-              <div className="col-xs-10 col-md-5">
-                <ToDoList title="Orders Processing" conns={this.state.eventlists['workflowrunning']} columns={['tracking_id', 'status']}/>
-              </div>
-              <div className="col-xs-10 col-md-5">
-                <ToDoList title="Customers" conns={this.state.customers} columns={['id', 'name']} create_order={this._createOrder.bind(this)}/>
-              </div>
-              <div className="col-xs-10 col-md-5">
-                <button className="btn btn-primary" onClick={this._joingame}>Join Game</button>
+              <div className="col-xs-12 col-md-6">  
+                <ToDoList title="Customers" conns={this.state.customers} columns={['id', 'name']} buttontxt="Create Orders(s)" buttonfn={this._createOrder.bind(this)}/>
+                <ToDoList title="Workflow Tracking" conns={this.state.eventlists['workflowrunning']} columns={['tracking_id', 'status']}/>
+             </div>
+              <div className="col-xs-12 col-md-6">
+                <div className="panel panel-blue">
+                  <div className="panel-heading dark-overlay">
+                    <a href="https://microsoft-my.sharepoint.com/personal/kehowli_microsoft_com/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fkehowli_microsoft_com%2FDocuments%2FOrderTemplates%2FPDFTemplate_EN1%2E2%2Emd&parent=%2Fpersonal%2Fkehowli_microsoft_com%2FDocuments%2FOrderTemplates&p=5">Edit PDF Template</a>
+                    </div>
+                </div>
+                <ToDoList title="Orders" conns={this.state.orders} columns={['id', 'status', 'ref']} buttontxt="Delete Orders(s)" buttonfn={this._deleteOrder.bind(this)}/>
+ 
+                
               </div>
             </div>
+
          </div>
-       );
-     else if (this.state.booterr) return (
-         <div>
-         {this.state.bootmsg}, refresh to try again
-         </div>
-       );
-     else return (
-       <div className="">
-        connecting...... {'to ' + JSON.stringify(this.props.buildprops)}
-      </div>
-     );
+       )
    }
  }
 

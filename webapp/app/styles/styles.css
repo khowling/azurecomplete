@@ -438,6 +438,7 @@ a.bg-danger:hover {
 /*Tabs*/
 
 .panel .tabs {
+	border-radius: 0!important;
 	margin: 0;
 	padding: 0;
 }

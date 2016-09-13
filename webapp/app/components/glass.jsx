@@ -24,6 +24,11 @@ export class ToDoList extends Component {
       this.setState({oref: e.target.value})
     }
 
+	_buttonPress() {
+		this.props.buttonfn(this.state.selected, this.state.oref)
+		this.setState({selected: [], oref: ""})
+	}
+
 
 	render () {
 		return (
@@ -41,14 +46,14 @@ export class ToDoList extends Component {
 				</div>
 				}
 				<div className="panel-footer">
+					{ this.props.buttonfn && 
 					<div className="input-group">
 						<input id="btn-input" type="text" className="form-control input-md" placeholder="run reference" onChange={this._handleChange.bind(this)} value={this.state.oref}/>
 						<span className="input-group-btn">
-							{ this.props.create_order && 
-								<button className="btn btn-primary btn-md" disabled={(this.state.selected.length == 0)} id="btn-todo" onClick={this.props.create_order.bind(this, this.state.selected, this.state.oref)} >Create Order</button>
-							}
+								<button className="btn btn-primary btn-md" disabled={(this.state.selected.length == 0)} id="btn-todo" onClick={this._buttonPress.bind(this)} >{this.props.buttontxt}</button>
 						</span>
 					</div>
+					}
 				</div>
 			</div>
 		)
@@ -74,67 +79,22 @@ const ToDoListItem = ({item, columns, selectfn, checked}) => {
     )
 }
 
-
-export const Glass = ({cust, order_wait, order_done, order_inprog}) => { 
+export const Glass = ({icon, title, qty, color}) => { 
     return ( 
 
-        <div className="row">
 			<div className="col-xs-6 col-md-6 col-lg-6">
-				<div className="panel panel-blue panel-widget ">
+				<div className={`panel panel-${color} panel-widget`}>
 					<div className="row no-padding">
 						<div className="col-sm-4 col-lg-5 widget-left">
-							<svg xmlns="http://www.w3.org/2000/svg" className="glyph stroked bag">
-                                <use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref="#stroked-bag" /></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" className={`glyph stroked ${icon}`}>
+                                <use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`#stroked-${icon}`} /></svg>
 						</div>
 						<div className="col-sm-8 col-lg-7 widget-right">
-							<div className="large">{order_wait}</div>
-							<div className="text-muted">New Orders</div>
+							<div className="large">{qty}</div>
+							<div className="text-muted">{title}</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div className="col-xs-6 col-md-6 col-lg-6">
-				<div className="panel panel-orange panel-widget">
-					<div className="row no-padding">
-						<div className="col-sm-4 col-lg-5 widget-left">
-							<svg xmlns="http://www.w3.org/2000/svg" className="glyph stroked empty-message">
-                            <use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref="#stroked-empty-message" /></svg>
-						</div>
-						<div className="col-sm-8 col-lg-7 widget-right">
-							<div className="large">{order_inprog}</div>
-							<div className="text-muted">Orders in Progress</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div className="col-xs-6 col-md-6 col-lg-6">
-				<div className="panel panel-teal panel-widget">
-					<div className="row no-padding">
-						<div className="col-sm-4 col-lg-5 widget-left">
-							<svg xmlns="http://www.w3.org/2000/svg" className="glyph stroked male-user">
-                            <use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref="#stroked-male-user" /></svg>
-						</div>
-						<div className="col-sm-8 col-lg-7 widget-right">
-							<div className="large">{cust}</div>
-							<div className="text-muted">Customers</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div className="col-xs-6 col-md-6 col-lg-6">
-				<div className="panel panel-red panel-widget">
-					<div className="row no-padding">
-						<div className="col-sm-4 col-lg-5 widget-left">
-							<svg xmlns="http://www.w3.org/2000/svg" className="glyph stroked app-window-with-content">
-                            <use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref="#stroked-app-window-with-content" /></svg>
-						</div>
-						<div className="col-sm-8 col-lg-7 widget-right">
-							<div className="large">{order_done}</div>
-							<div className="text-muted">PDFs Generated</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
     );
 }

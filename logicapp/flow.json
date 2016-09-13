@@ -1,0 +1,163 @@
+{
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2015-08-01-preview/workflowdefinition.json#",
+    "actions": {
+        "Create_file": {
+            "conditions": [
+                {
+                    "dependsOn": "MarkdowntoPDF"
+                }
+            ],
+            "inputs": {
+                "body": "@base64toBinary(body('MarkdowntoPDF'))",
+                "host": {
+                    "api": {
+                        "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/azureblob"
+                    },
+                    "connection": {
+                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                    }
+                },
+                "method": "post",
+                "path": "/datasets/default/files",
+                "queries": {
+                    "folderPath": "/2016",
+                    "name": "@{triggerBody()['custid']}v1.pdf"
+                }
+            },
+            "type": "ApiConnection"
+        },
+        "CustomerJSONtoMarkdown": {
+            "conditions": [
+                {
+                    "dependsOn": "GetCustomerJSON"
+                }
+            ],
+            "inputs": {
+                "body": "@body('GetCustomerJSON')",
+                "function": {
+                    "id": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/functiondemo001/functions/CustomerJSONtoMarkdown"
+                }
+            },
+            "type": "Function"
+        },
+        "GetCustomerJSON": {
+            "conditions": [
+                {
+                    "dependsOn": "UpdateOrderDocumentSTART"
+                }
+            ],
+            "inputs": {
+                "body": "@body('UpdateOrderDocumentSTART')",
+                "function": {
+                    "id": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/functiondemo001/functions/GetCustomerJSON"
+                }
+            },
+            "type": "Function"
+        },
+        "MarkdowntoPDF": {
+            "conditions": [
+                {
+                    "dependsOn": "CustomerJSONtoMarkdown"
+                }
+            ],
+            "inputs": {
+                "body": "@body('CustomerJSONtoMarkdown')",
+                "function": {
+                    "id": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/functiondemo001/functions/MarkdowntoPDF"
+                }
+            },
+            "type": "Function"
+        },
+        "Send_an_email": {
+            "conditions": [
+                {
+                    "dependsOn": "Create_file"
+                }
+            ],
+            "inputs": {
+                "body": {
+                    "Attachments": [
+                        {
+                            "ContentBytes": "@{body('MarkdowntoPDF')}",
+                            "Name": "@{triggerBody()['custid']}v1.pdf"
+                        }
+                    ],
+                    "Body": "Your Order please expect delivery soon",
+                    "From": "kehowli@microsoft.com",
+                    "Subject": "Your Order: @{body('GetCustomerJSON').customerDoc.name}, REF: @{body('GetCustomerJSON').orderDoc.ref}",
+                    "To": "@{body('GetCustomerJSON').customerDoc.email}"
+                },
+                "host": {
+                    "api": {
+                        "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/office365"
+                    },
+                    "connection": {
+                        "name": "@parameters('$connections')['office365']['connectionId']"
+                    }
+                },
+                "method": "post",
+                "path": "/Mail"
+            },
+            "type": "ApiConnection"
+        },
+        "UpdateOrderDocument": {
+            "conditions": [
+                {
+                    "dependsOn": "Send_an_email"
+                }
+            ],
+            "inputs": {
+                "body": "@triggerBody()",
+                "function": {
+                    "id": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/functiondemo001/functions/UpdateOrderDocument"
+                },
+                "queries": {
+                    "status": "COMPLETE"
+                }
+            },
+            "type": "Function"
+        },
+        "UpdateOrderDocumentSTART": {
+            "conditions": [],
+            "inputs": {
+                "body": "@triggerBody()",
+                "function": {
+                    "id": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/functiondemo001/functions/UpdateOrderDocument"
+                },
+                "queries": {
+                    "status": "INPROGRESS"
+                }
+            },
+            "type": "Function"
+        }
+    },
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "parameters": {
+        "$connections": {
+            "defaultValue": {},
+            "type": "Object"
+        }
+    },
+    "triggers": {
+        "manual": {
+            "inputs": {
+                "schema": {
+                    "properties": {
+                        "custId": {
+                            "type": "string"
+                        },
+                        "orderId": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "orderId"
+                    ],
+                    "type": "object"
+                }
+            },
+            "type": "Manual"
+        }
+    }
+}
