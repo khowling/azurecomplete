@@ -21,7 +21,7 @@
                 "path": "/datasets/default/files",
                 "queries": {
                     "folderPath": "/2016",
-                    "name": "@{triggerBody()['custid']}v1.pdf"
+                    "name": "@{triggerBody()['orderId']}.pdf"
                 }
             },
             "type": "ApiConnection"
@@ -79,7 +79,7 @@
                     "Attachments": [
                         {
                             "ContentBytes": "@{body('MarkdowntoPDF')}",
-                            "Name": "@{triggerBody()['custid']}v1.pdf"
+                            "Name": "@{triggerBody()['orderId']}.pdf"
                         }
                     ],
                     "Body": "Your Order please expect delivery soon",
@@ -144,9 +144,6 @@
             "inputs": {
                 "schema": {
                     "properties": {
-                        "custId": {
-                            "type": "string"
-                        },
                         "orderId": {
                             "type": "string"
                         }

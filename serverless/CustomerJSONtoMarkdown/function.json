@@ -1,0 +1,23 @@
+{
+  "bindings": [
+    {
+      "type": "httpTrigger",
+      "direction": "in",
+      "webHookType": "genericJson",
+      "name": "req"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "apiHubFile",
+      "name": "markDowndownTemplate",
+      "path": "OrderTemplates/PDFTemplate_EN1.2.md",
+      "connection": "onedriveforbusiness_ONEDRIVEFORBUSINESS",
+      "direction": "in"
+    }
+  ],
+  "disabled": false
+}

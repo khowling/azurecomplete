@@ -43,18 +43,17 @@
             "type": "String"
         },
         "workflows_orderflow_connectionId": {
-            "defaultValue": "/subscriptions/,[subscription().subscriptionId)],/resourceGroups/AppServiceTest/providers/Microsoft.Web/connections/azureblob-2",
+            "defaultValue": "[concat('/subscriptions/',subscription().subscriptionId)],'/resourceGroups/', resourceGroup().id, '/providers/Microsoft.Web/connections/', 'azureblob-2')]",
             "type": "String"
         },
         "workflows_orderflow_connectionId_1": {
-            "defaultValue": "/subscriptions/,[subscription().subscriptionId)],/resourceGroups/AppServiceTest/providers/Microsoft.Web/connections/office365-1",
+            "defaultValue": "[concat('/subscriptions/',subscription().subscriptionId)],'/resourceGroups/', resourceGroup().id, '/providers/Microsoft.Web/connections/', 'office365-1')]",
             "type": "String"
         }
     },
     "variables": {},
     "resources": [
         {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.DocumentDB/databaseAccounts/demodb01'.",
             "type": "Microsoft.DocumentDB/databaseAccounts",
             "kind": "GlobalDocumentDB",
             "name": "[parameters('databaseAccounts_name')]",
@@ -74,7 +73,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Logic/workflows/orderflow'.",
             "type": "Microsoft.Logic/workflows",
             "name": "[parameters('workflows_orderflow_name')]",
             "apiVersion": "2016-06-01",
@@ -97,7 +95,6 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/appservicetest/providers/Microsoft.Storage/storageAccounts/appdiags'.",
             "type": "Microsoft.Storage/storageAccounts",
             "sku": {
                 "name": "Standard_LRS",
@@ -113,7 +110,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/appservicetest/providers/Microsoft.Storage/storageAccounts/function7193bdf9aaee'.",
             "type": "Microsoft.Storage/storageAccounts",
             "sku": {
                 "name": "Standard_LRS",
@@ -129,7 +125,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/appservicetest/providers/Microsoft.Storage/storageAccounts/reportpdf'.",
             "type": "Microsoft.Storage/storageAccounts",
             "sku": {
                 "name": "Standard_LRS",
@@ -147,7 +142,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/serverfarms/DevPlan001'.",
             "type": "Microsoft.Web/serverfarms",
             "sku": {
                 "name": "B1",
@@ -168,7 +162,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/functiondemo001'.",
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
             "name": "[parameters('sites_function_name')]",
@@ -208,7 +201,6 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Logic/workflows/orderflow/accessKeys/default'.",
             "type": "Microsoft.Logic/workflows/accessKeys",
             "name": "[parameters('accessKeys_default_name')]",
             "apiVersion": "2015-02-01-preview",

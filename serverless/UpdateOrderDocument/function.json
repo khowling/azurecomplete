@@ -1,0 +1,34 @@
+{
+  "bindings": [
+    {
+      "type": "httpTrigger",
+      "direction": "in",
+      "webHookType": "genericJson",
+      "name": "req"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "documentDB",
+      "name": "outputOrder",
+      "databaseName": "demodb",
+      "collectionName": "orders",
+      "createIfNotExists": false,
+      "connection": "demodb01_DOCUMENTDB",
+      "direction": "out"
+    },
+    {
+      "type": "documentDB",
+      "name": "inputOrder",
+      "databaseName": "demodb",
+      "collectionName": "orders",
+      "id": "{orderId}",
+      "connection": "demodb01_DOCUMENTDB",
+      "direction": "in"
+    }
+  ],
+  "disabled": false
+}
