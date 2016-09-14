@@ -2,64 +2,36 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "databaseAccounts_demodb01_name": {
-            "defaultValue": null,
-            "type": "SecureString"
-        },
-        "databaseAccounts_demodb01_name_1": {
+        "databaseAccounts_name": {
             "defaultValue": "demodb01",
             "type": "String"
         },
-        "namespaces_appdiags_name": {
+        "namespaces_name": {
             "defaultValue": "appdiags",
-            "type": "String"
-        },
-        "alertrules_Fails_name": {
-            "defaultValue": "Fails",
-            "type": "String"
-        },
-        "alertrules_website_avaiability_name": {
-            "defaultValue": "website avaiability",
-            "type": "String"
-        },
-        "components_java_kh01_name": {
-            "defaultValue": "java-kh01",
-            "type": "String"
-        },
-        "components_projectx_dev1_name": {
-            "defaultValue": "projectx-dev1",
             "type": "String"
         },
         "workflows_orderflow_name": {
             "defaultValue": "orderflow",
             "type": "String"
         },
-        "servers_employeeserver_name": {
-            "defaultValue": "employeeserver",
+        "storageAccounts_appdiags_name": {
+            "defaultValue": "appdiags",
             "type": "String"
         },
-        "storageAccounts_function7193bdf9aaee_name": {
-            "defaultValue": "function7193bdf9aaee",
-            "type": "String"
-        },
-        "storageAccounts_logicappdiags01_name": {
-            "defaultValue": "logicappdiags01",
+        "storageAccounts_function_name": {
+            "defaultValue": "orderFunctionsStore",
             "type": "String"
         },
         "storageAccounts_reportpdf_name": {
             "defaultValue": "reportpdf",
             "type": "String"
         },
-        "storageAccounts_zrs1_name": {
-            "defaultValue": "zrs1",
-            "type": "String"
-        },
         "serverfarms_DevPlan001_name": {
             "defaultValue": "DevPlan001",
             "type": "String"
         },
-        "sites_functiondemo001_name": {
-            "defaultValue": "functiondemo001",
+        "sites_function_name": {
+            "defaultValue": "orderFunctions",
             "type": "String"
         },
         "AuthorizationRules_RootManageSharedAccessKey_name": {
@@ -82,30 +54,6 @@
             "defaultValue": "orderflow/default",
             "type": "String"
         },
-        "databases_digitalreportngdev_name": {
-            "defaultValue": "employeeserver/digitalreportngdev",
-            "type": "String"
-        },
-        "databases_employeedb_name": {
-            "defaultValue": "employeeserver/employeedb",
-            "type": "String"
-        },
-        "databases_master_name": {
-            "defaultValue": "employeeserver/master",
-            "type": "String"
-        },
-        "firewallRules_AllowAllWindowsAzureIps_name": {
-            "defaultValue": "employeeserver/AllowAllWindowsAzureIps",
-            "type": "String"
-        },
-        "firewallRules_ClientIPAddress_2016_7_4_21_17_46_name": {
-            "defaultValue": "employeeserver/ClientIPAddress_2016-7-4_21-17-46",
-            "type": "String"
-        },
-        "alertrules_website_avaiability_resourceUri": {
-            "defaultValue": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/microsoft.web/serverfarms/ServicePlan409d4a6f-bb5e",
-            "type": "String"
-        },
         "workflows_orderflow_connectionId": {
             "defaultValue": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/connections/azureblob-2",
             "type": "String"
@@ -121,7 +69,7 @@
             "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.DocumentDB/databaseAccounts/demodb01'.",
             "type": "Microsoft.DocumentDB/databaseAccounts",
             "kind": "GlobalDocumentDB",
-            "name": "[parameters('databaseAccounts_demodb01_name_1')]",
+            "name": "[parameters('databaseAccounts_name')]",
             "apiVersion": "2015-04-08",
             "location": "West Europe",
             "tags": {},
@@ -132,7 +80,7 @@
                     "maxIntervalInSeconds": 5,
                     "maxStalenessPrefix": 100
                 },
-                "name": "[parameters('databaseAccounts_demodb01_name')]"
+                "name": "[parameters('databaseAccounts_name')]"
             },
             "resources": [],
             "dependsOn": []
@@ -145,7 +93,7 @@
                 "tier": "Basic"
             },
             "kind": "EventHub",
-            "name": "[parameters('namespaces_appdiags_name')]",
+            "name": "[parameters('namespaces_name')]",
             "apiVersion": "2015-08-01",
             "location": "West Europe",
             "tags": {},
@@ -153,105 +101,9 @@
                 "provisioningState": "Succeeded",
                 "status": "Active",
                 "createdAt": "2016-09-12T15:37:22.497Z",
-                "serviceBusEndpoint": "[concat('https://', parameters('namespaces_appdiags_name'),'.servicebus.windows.net:443/')]",
+                "serviceBusEndpoint": "[concat('https://', parameters('namespaces_name'),'.servicebus.windows.net:443/')]",
                 "enabled": true,
                 "updatedAt": "2016-09-12T15:37:44.647Z"
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/microsoft.insights/alertrules/Fails'.",
-            "type": "microsoft.insights/alertrules",
-            "name": "[parameters('alertrules_Fails_name')]",
-            "apiVersion": "2014-04-01",
-            "location": "westeurope",
-            "tags": {
-                "hidden-link:/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Logic/workflows/orderflow": "Resource"
-            },
-            "properties": {
-                "name": "[parameters('alertrules_Fails_name')]",
-                "description": "",
-                "isEnabled": true,
-                "condition": {
-                    "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
-                    "dataSource": {
-                        "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
-                        "resourceUri": "[resourceId('Microsoft.Logic/workflows', parameters('workflows_orderflow_name'))]",
-                        "metricName": "RunsFailed"
-                    },
-                    "operator": "GreaterThanOrEqual",
-                    "threshold": 1,
-                    "windowSize": "PT5M"
-                },
-                "action": {
-                    "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
-                    "sendToServiceOwners": true,
-                    "customEmails": []
-                }
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Logic/workflows', parameters('workflows_orderflow_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/microsoft.insights/alertrules/website avaiability'.",
-            "type": "microsoft.insights/alertrules",
-            "name": "[parameters('alertrules_website_avaiability_name')]",
-            "apiVersion": "2014-04-01",
-            "location": "southcentralus",
-            "tags": {
-                "hidden-link:/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/microsoft.web/serverfarms/ServicePlan409d4a6f-bb5e": "Resource"
-            },
-            "properties": {
-                "name": "[parameters('alertrules_website_avaiability_name')]",
-                "description": "",
-                "isEnabled": true,
-                "condition": {
-                    "odata.type": "Microsoft.Azure.Management.Insights.Models.ManagementEventRuleCondition",
-                    "dataSource": {
-                        "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleManagementEventDataSource",
-                        "resourceUri": "[parameters('alertrules_website_avaiability_resourceUri')]"
-                    }
-                },
-                "action": {
-                    "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
-                    "sendToServiceOwners": true,
-                    "customEmails": []
-                }
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/microsoft.insights/components/java-kh01'.",
-            "type": "microsoft.insights/components",
-            "kind": "web",
-            "name": "[parameters('components_java_kh01_name')]",
-            "apiVersion": "2014-04-01",
-            "location": "Central US",
-            "tags": {
-                "hidden-link:/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/java-kh01": "Resource"
-            },
-            "properties": {
-                "ApplicationId": "[parameters('components_java_kh01_name')]"
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/microsoft.insights/components/projectx-dev1'.",
-            "type": "microsoft.insights/components",
-            "kind": "web",
-            "name": "[parameters('components_projectx_dev1_name')]",
-            "apiVersion": "2014-04-01",
-            "location": "Central US",
-            "tags": {
-                "hidden-link:/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/projectx-dev1": "Resource"
-            },
-            "properties": {
-                "ApplicationId": "[parameters('components_projectx_dev1_name')]"
             },
             "resources": [],
             "dependsOn": []
@@ -325,7 +177,7 @@
                             "inputs": {
                                 "body": "@body('GetCustomerJSON')",
                                 "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_functiondemo001_name')), '/functions/CustomerJSONtoMarkdown')]"
+                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/CustomerJSONtoMarkdown')]"
                                 }
                             },
                             "conditions": [
@@ -339,7 +191,7 @@
                             "inputs": {
                                 "body": "@body('UpdateOrderDocumentSTART')",
                                 "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_functiondemo001_name')), '/functions/GetCustomerJSON')]"
+                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/GetCustomerJSON')]"
                                 }
                             },
                             "conditions": [
@@ -353,7 +205,7 @@
                             "inputs": {
                                 "body": "@body('CustomerJSONtoMarkdown')",
                                 "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_functiondemo001_name')), '/functions/MarkdowntoPDF')]"
+                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/MarkdowntoPDF')]"
                                 }
                             },
                             "conditions": [
@@ -399,7 +251,7 @@
                             "inputs": {
                                 "body": "@triggerBody()",
                                 "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_functiondemo001_name')), '/functions/UpdateOrderDocument')]"
+                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/UpdateOrderDocument')]"
                                 },
                                 "queries": {
                                     "status": "COMPLETE"
@@ -416,7 +268,7 @@
                             "inputs": {
                                 "body": "@triggerBody()",
                                 "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_functiondemo001_name')), '/functions/UpdateOrderDocument')]"
+                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/UpdateOrderDocument')]"
                                 },
                                 "queries": {
                                     "status": "INPROGRESS"
@@ -446,21 +298,22 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_functiondemo001_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_function_name'))]"
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Sql/servers/employeeserver'.",
-            "type": "Microsoft.Sql/servers",
-            "kind": "v12.0",
-            "name": "[parameters('servers_employeeserver_name')]",
-            "apiVersion": "2014-04-01-preview",
-            "location": "North Europe",
-            "properties": {
-                "administratorLogin": "kehowli",
-                "administratorLoginPassword": null,
-                "version": "12.0"
+            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/appservicetest/providers/Microsoft.Storage/storageAccounts/appdiags'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
             },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_appdiags_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "westeurope",
+            "tags": {},
+            "properties": {},
             "resources": [],
             "dependsOn": []
         },
@@ -472,23 +325,7 @@
                 "tier": "Standard"
             },
             "kind": "Storage",
-            "name": "[parameters('storageAccounts_function7193bdf9aaee_name')]",
-            "apiVersion": "2016-01-01",
-            "location": "westeurope",
-            "tags": {},
-            "properties": {},
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/appservicetest/providers/Microsoft.Storage/storageAccounts/logicappdiags01'.",
-            "type": "Microsoft.Storage/storageAccounts",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "kind": "Storage",
-            "name": "[parameters('storageAccounts_logicappdiags01_name')]",
+            "name": "[parameters('storageAccounts_function_name')]",
             "apiVersion": "2016-01-01",
             "location": "westeurope",
             "tags": {},
@@ -511,22 +348,6 @@
             "properties": {
                 "accessTier": "Hot"
             },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/appservicetest/providers/Microsoft.Storage/storageAccounts/zrs1'.",
-            "type": "Microsoft.Storage/storageAccounts",
-            "sku": {
-                "name": "Standard_ZRS",
-                "tier": "Standard"
-            },
-            "kind": "Storage",
-            "name": "[parameters('storageAccounts_zrs1_name')]",
-            "apiVersion": "2016-01-01",
-            "location": "ukwest",
-            "tags": {},
-            "properties": {},
             "resources": [],
             "dependsOn": []
         },
@@ -555,30 +376,30 @@
             "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/functiondemo001'.",
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
-            "name": "[parameters('sites_functiondemo001_name')]",
+            "name": "[parameters('sites_function_name')]",
             "apiVersion": "2015-08-01",
             "location": "West Europe",
             "tags": {
                 "hidden-related:/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourcegroups/AppServiceTest/providers/Microsoft.Web/serverfarms/DevPlan001": "empty"
             },
             "properties": {
-                "name": "[parameters('sites_functiondemo001_name')]",
+                "name": "[parameters('sites_function_name')]",
                 "hostNames": [
-                    "functiondemo001.azurewebsites.net"
+                    "[concat(parameters('sites_function_name'),'.azurewebsites.net')]"
                 ],
                 "enabledHostNames": [
-                    "functiondemo001.azurewebsites.net",
-                    "functiondemo001.scm.azurewebsites.net"
+                    "[concat(parameters('sites_function_name'),'.azurewebsites.net')]",
+                    "[concat(parameters('sites_function_name'),'.scm.azurewebsites.net')]"
                 ],
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(parameters('sites_functiondemo001_name'),'.azurewebsites.net')]",
+                        "name": "[concat(parameters('sites_function_name'),'.azurewebsites.net')]",
                         "sslState": 0,
                         "thumbprint": null,
                         "ipBasedSslState": 0
                     },
                     {
-                        "name": "[concat(parameters('sites_functiondemo001_name'),'.scm.azurewebsites.net')]",
+                        "name": "[concat(parameters('sites_function_name'),'.scm.azurewebsites.net')]",
                         "sslState": 0,
                         "thumbprint": null,
                         "ipBasedSslState": 0
@@ -605,7 +426,7 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_appdiags_name'))]"
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_name'))]"
             ]
         },
         {
@@ -622,7 +443,7 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_appdiags_name'))]"
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_name'))]"
             ]
         },
         {
@@ -644,7 +465,7 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_appdiags_name'))]"
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_name'))]"
             ]
         },
         {
@@ -659,7 +480,7 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_appdiags_name'))]",
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_name'))]",
                 "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventhubs_orderapp_name'))]"
             ]
         },
@@ -672,122 +493,6 @@
             "resources": [],
             "dependsOn": [
                 "[resourceId('Microsoft.Logic/workflows', parameters('workflows_orderflow_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Sql/servers/employeeserver/databases/digitalreportngdev'.",
-            "type": "Microsoft.Sql/servers/databases",
-            "kind": "v12.0,user",
-            "name": "[parameters('databases_digitalreportngdev_name')]",
-            "apiVersion": "2014-04-01-preview",
-            "location": "North Europe",
-            "properties": {
-                "databaseId": "d21c29d4-9622-4cf1-ad63-022510fa3fcd",
-                "edition": "Basic",
-                "status": "Online",
-                "serviceLevelObjective": "Basic",
-                "collation": "SQL_Latin1_General_CP1_CI_AS",
-                "maxSizeBytes": "2147483648",
-                "creationDate": "2016-08-16T08:36:49.807Z",
-                "currentServiceObjectiveId": "dd6d99bb-f193-4ec1-86f2-43d3bccbc49c",
-                "requestedServiceObjectiveId": "dd6d99bb-f193-4ec1-86f2-43d3bccbc49c",
-                "requestedServiceObjectiveName": "Basic",
-                "defaultSecondaryLocation": "West Europe",
-                "earliestRestoreDate": "2016-09-06T00:00:00Z",
-                "elasticPoolName": null,
-                "containmentState": 2
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('servers_employeeserver_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Sql/servers/employeeserver/databases/employeedb'.",
-            "type": "Microsoft.Sql/servers/databases",
-            "kind": "v12.0,user",
-            "name": "[parameters('databases_employeedb_name')]",
-            "apiVersion": "2014-04-01-preview",
-            "location": "North Europe",
-            "properties": {
-                "databaseId": "42f867e0-807d-4ab8-83c0-7fd8858ab859",
-                "edition": "Basic",
-                "status": "Online",
-                "serviceLevelObjective": "Basic",
-                "collation": "SQL_Latin1_General_CP1_CI_AS",
-                "maxSizeBytes": "2147483648",
-                "creationDate": "2016-08-11T14:11:00.413Z",
-                "currentServiceObjectiveId": "dd6d99bb-f193-4ec1-86f2-43d3bccbc49c",
-                "requestedServiceObjectiveId": "dd6d99bb-f193-4ec1-86f2-43d3bccbc49c",
-                "requestedServiceObjectiveName": "Basic",
-                "defaultSecondaryLocation": "West Europe",
-                "earliestRestoreDate": "2016-09-06T00:00:00Z",
-                "elasticPoolName": null,
-                "containmentState": 2
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('servers_employeeserver_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Sql/servers/employeeserver/databases/master'.",
-            "type": "Microsoft.Sql/servers/databases",
-            "kind": "v12.0,system",
-            "name": "[parameters('databases_master_name')]",
-            "apiVersion": "2014-04-01-preview",
-            "location": "North Europe",
-            "properties": {
-                "databaseId": "e00b20e9-ccdf-4c51-9c11-6bec12f8e6d3",
-                "edition": "System",
-                "status": "Online",
-                "serviceLevelObjective": "System0",
-                "collation": "SQL_Latin1_General_CP1_CI_AS",
-                "maxSizeBytes": "32212254720",
-                "creationDate": "2016-08-11T14:10:31.467Z",
-                "currentServiceObjectiveId": "29dd7459-4a7c-4e56-be22-f0adda49440d",
-                "requestedServiceObjectiveId": "29dd7459-4a7c-4e56-be22-f0adda49440d",
-                "requestedServiceObjectiveName": "System0",
-                "defaultSecondaryLocation": "West Europe",
-                "earliestRestoreDate": null,
-                "elasticPoolName": null,
-                "containmentState": 2
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('servers_employeeserver_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Sql/servers/employeeserver/firewallRules/AllowAllWindowsAzureIps'.",
-            "type": "Microsoft.Sql/servers/firewallRules",
-            "kind": "v12.0",
-            "name": "[parameters('firewallRules_AllowAllWindowsAzureIps_name')]",
-            "apiVersion": "2014-04-01-preview",
-            "location": "North Europe",
-            "properties": {
-                "startIpAddress": "0.0.0.0",
-                "endIpAddress": "0.0.0.0"
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('servers_employeeserver_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Sql/servers/employeeserver/firewallRules/ClientIPAddress_2016-7-4_21-17-46'.",
-            "type": "Microsoft.Sql/servers/firewallRules",
-            "kind": "v12.0",
-            "name": "[parameters('firewallRules_ClientIPAddress_2016_7_4_21_17_46_name')]",
-            "apiVersion": "2014-04-01-preview",
-            "location": "North Europe",
-            "properties": {
-                "startIpAddress": "151.228.87.132",
-                "endIpAddress": "151.228.87.132"
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('servers_employeeserver_name'))]"
             ]
         }
     ]
