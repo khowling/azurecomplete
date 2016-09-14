@@ -6,10 +6,6 @@
             "defaultValue": "demodb01",
             "type": "String"
         },
-        "namespaces_name": {
-            "defaultValue": "appdiags",
-            "type": "String"
-        },
         "workflows_orderflow_name": {
             "defaultValue": "orderflow",
             "type": "String"
@@ -47,11 +43,11 @@
             "type": "String"
         },
         "workflows_orderflow_connectionId": {
-            "defaultValue": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/connections/azureblob-2",
+            "defaultValue": "/subscriptions/,[subscription().subscriptionId)],/resourceGroups/AppServiceTest/providers/Microsoft.Web/connections/azureblob-2",
             "type": "String"
         },
         "workflows_orderflow_connectionId_1": {
-            "defaultValue": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/connections/office365-1",
+            "defaultValue": "/subscriptions/,[subscription().subscriptionId)],/resourceGroups/AppServiceTest/providers/Microsoft.Web/connections/office365-1",
             "type": "String"
         }
     },
@@ -88,182 +84,12 @@
                 "definition": {
                     "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2015-08-01-preview/workflowdefinition.json#",
                     "contentVersion": "1.0.0.0",
-                    "parameters": {
-                        "$connections": {
-                            "defaultValue": {},
-                            "type": "Object"
-                        }
-                    },
-                    "triggers": {
-                        "manual": {
-                            "type": "Manual",
-                            "inputs": {
-                                "schema": {
-                                    "properties": {
-                                        "custId": {
-                                            "type": "string"
-                                        },
-                                        "orderId": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "required": [
-                                        "orderId"
-                                    ],
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "actions": {
-                        "Create_file": {
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": "@base64toBinary(body('MarkdowntoPDF'))",
-                                "host": {
-                                    "api": {
-                                        "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/azureblob"
-                                    },
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                    }
-                                },
-                                "method": "post",
-                                "path": "/datasets/default/files",
-                                "queries": {
-                                    "folderPath": "/2016",
-                                    "name": "@{triggerBody()['custid']}v1.pdf"
-                                }
-                            },
-                            "conditions": [
-                                {
-                                    "dependsOn": "MarkdowntoPDF"
-                                }
-                            ]
-                        },
-                        "CustomerJSONtoMarkdown": {
-                            "type": "Function",
-                            "inputs": {
-                                "body": "@body('GetCustomerJSON')",
-                                "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/CustomerJSONtoMarkdown')]"
-                                }
-                            },
-                            "conditions": [
-                                {
-                                    "dependsOn": "GetCustomerJSON"
-                                }
-                            ]
-                        },
-                        "GetCustomerJSON": {
-                            "type": "Function",
-                            "inputs": {
-                                "body": "@body('UpdateOrderDocumentSTART')",
-                                "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/GetCustomerJSON')]"
-                                }
-                            },
-                            "conditions": [
-                                {
-                                    "dependsOn": "UpdateOrderDocumentSTART"
-                                }
-                            ]
-                        },
-                        "MarkdowntoPDF": {
-                            "type": "Function",
-                            "inputs": {
-                                "body": "@body('CustomerJSONtoMarkdown')",
-                                "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/MarkdowntoPDF')]"
-                                }
-                            },
-                            "conditions": [
-                                {
-                                    "dependsOn": "CustomerJSONtoMarkdown"
-                                }
-                            ]
-                        },
-                        "Send_an_email": {
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": {
-                                    "Attachments": [
-                                        {
-                                            "ContentBytes": "@{body('MarkdowntoPDF')}",
-                                            "Name": "@{triggerBody()['custid']}v1.pdf"
-                                        }
-                                    ],
-                                    "Body": "Your Order please expect delivery soon",
-                                    "From": "kehowli@microsoft.com",
-                                    "Subject": "Your Order: @{body('GetCustomerJSON').customerDoc.name}, REF: @{body('GetCustomerJSON').orderDoc.ref}",
-                                    "To": "@{body('GetCustomerJSON').customerDoc.email}"
-                                },
-                                "host": {
-                                    "api": {
-                                        "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/office365"
-                                    },
-                                    "connection": {
-                                        "name": "@parameters('$connections')['office365']['connectionId']"
-                                    }
-                                },
-                                "method": "post",
-                                "path": "/Mail"
-                            },
-                            "conditions": [
-                                {
-                                    "dependsOn": "Create_file"
-                                }
-                            ]
-                        },
-                        "UpdateOrderDocument": {
-                            "type": "Function",
-                            "inputs": {
-                                "body": "@triggerBody()",
-                                "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/UpdateOrderDocument')]"
-                                },
-                                "queries": {
-                                    "status": "COMPLETE"
-                                }
-                            },
-                            "conditions": [
-                                {
-                                    "dependsOn": "Send_an_email"
-                                }
-                            ]
-                        },
-                        "UpdateOrderDocumentSTART": {
-                            "type": "Function",
-                            "inputs": {
-                                "body": "@triggerBody()",
-                                "function": {
-                                    "id": "[concat(resourceId('Microsoft.Web/sites', parameters('sites_function_name')), '/functions/UpdateOrderDocument')]"
-                                },
-                                "queries": {
-                                    "status": "INPROGRESS"
-                                }
-                            },
-                            "conditions": []
-                        }
-                    },
+                    "parameters": {},
+                    "triggers": {},
+                    "actions": {},
                     "outputs": {}
                 },
-                "parameters": {
-                    "$connections": {
-                        "value": {
-                            "azureblob": {
-                                "connectionId": "[parameters('workflows_orderflow_connectionId')]",
-                                "connectionName": "azureblob-2",
-                                "id": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/providers/Microsoft.Web/locations/westeurope/managedApis/azureblob"
-                            },
-                            "office365": {
-                                "connectionId": "[parameters('workflows_orderflow_connectionId_1')]",
-                                "connectionName": "office365-1",
-                                "id": "/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/providers/Microsoft.Web/locations/westeurope/managedApis/office365"
-                            }
-                        }
-                    }
-                }
+                "parameters": {}
             },
             "resources": [],
             "dependsOn": [

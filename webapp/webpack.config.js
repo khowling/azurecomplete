@@ -3,21 +3,24 @@ var path = require('path');
 var util = require('util');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var pkg = require('./package.json');
-var port = pkg.config.devPort,
-    host = pkg.config.devHost,
-    https = pkg.config.devHttps,
-    target = pkg.config.buildDir;
 
-var jsBundle = path.join('js', util.format('[name].%s.js', pkg.version));
+//var pkg = require('./package.json');
+var port = '', //'3000', //pkg.config.devPort,
+    host = '', //'http://localhost', //pkg.config.devHost,
+    https = '', //pkg.config.devHttps,
+    target = './build', // pkg.config.buildDir,
+    version = '0.0.0.1', //pkg.version,
+    name =  'keith' // pkg.name
+
+var jsBundle = path.join('js', util.format('[name].%s.js', version));
 var fileLoader = 'file-loader?name=[path][name].[ext]';
 var htmlLoader = fileLoader + '!' +
    'template-html-loader?' + [
      'raw=true',
      'engine=lodash',
-     'VERSION=' + pkg.version,
-     'TITLE=' + pkg.name,
-     util.format('SERVER_URL=%s:%d',  'http://localhost', 3000)
+     'VERSION=' + version,
+     'TITLE=' + name,
+     'SERVER_URL='
    ].join('&')
 
 console.log ('htmlLoader' + htmlLoader);
@@ -35,6 +38,9 @@ module.exports = {
         new webpack.NoErrorsPlugin(),
         new webpack.optimize.OccurenceOrderPlugin()
     ],
+    node: {
+        fs: "empty"
+    },
     module: {
         loaders: [
             {
@@ -45,6 +51,10 @@ module.exports = {
             {
               test: /\.html$/,
               loader: htmlLoader
+            },
+            {
+              test: /\.json$/,
+              loader: 'json-loader'
             },
             {
               test: /\.scss$|\.css$/,

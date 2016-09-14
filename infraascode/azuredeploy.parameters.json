@@ -2,19 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "databaseAccounts_demodb01_name": {
-            "value": null
-        },
-        "databaseAccounts_demodb01_name_1": {
-            "value": null
-        },
-        "namespaces_appdiags_name": {
-            "value": null
-        },
-        "alertrules_Fails_name": {
-            "value": null
-        },
-        "alertrules_website_avaiability_name": {
+        "databaseAccounts_name": {
             "value": null
         },
         "workflows_orderflow_name": {
