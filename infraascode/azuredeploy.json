@@ -42,14 +42,6 @@
             "defaultValue": "appdiags/logicapp",
             "type": "String"
         },
-        "eventhubs_orderapp_name": {
-            "defaultValue": "appdiags/orderapp",
-            "type": "String"
-        },
-        "consumergroups_$Default_name": {
-            "defaultValue": "appdiags/orderapp/$Default",
-            "type": "String"
-        },
         "accessKeys_default_name": {
             "defaultValue": "orderflow/default",
             "type": "String"
@@ -81,29 +73,6 @@
                     "maxStalenessPrefix": 100
                 },
                 "name": "[parameters('databaseAccounts_name')]"
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourcegroups/AppServiceTest/providers/Microsoft.EventHub/namespaces/appdiags'.",
-            "type": "Microsoft.EventHub/namespaces",
-            "sku": {
-                "name": "Basic",
-                "tier": "Basic"
-            },
-            "kind": "EventHub",
-            "name": "[parameters('namespaces_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "West Europe",
-            "tags": {},
-            "properties": {
-                "provisioningState": "Succeeded",
-                "status": "Active",
-                "createdAt": "2016-09-12T15:37:22.497Z",
-                "serviceBusEndpoint": "[concat('https://', parameters('namespaces_name'),'.servicebus.windows.net:443/')]",
-                "enabled": true,
-                "updatedAt": "2016-09-12T15:37:44.647Z"
             },
             "resources": [],
             "dependsOn": []
@@ -410,78 +379,6 @@
             "resources": [],
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_DevPlan001_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourcegroups/AppServiceTest/providers/Microsoft.EventHub/namespaces/appdiags/AuthorizationRules/RootManageSharedAccessKey'.",
-            "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
-            "name": "[parameters('AuthorizationRules_RootManageSharedAccessKey_name')]",
-            "apiVersion": "2015-08-01",
-            "properties": {
-                "rights": [
-                    "Listen",
-                    "Manage",
-                    "Send"
-                ]
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourcegroups/AppServiceTest/providers/Microsoft.EventHub/namespaces/appdiags/AuthorizationRules/logicapp'.",
-            "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
-            "name": "[parameters('AuthorizationRules_logicapp_name')]",
-            "apiVersion": "2015-08-01",
-            "properties": {
-                "rights": [
-                    "Manage",
-                    "Send",
-                    "Listen"
-                ]
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourcegroups/AppServiceTest/providers/Microsoft.EventHub/namespaces/appdiags/eventhubs/orderapp'.",
-            "type": "Microsoft.EventHub/namespaces/eventhubs",
-            "name": "[parameters('eventhubs_orderapp_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "West Europe",
-            "properties": {
-                "messageRetentionInDays": 1,
-                "status": "Active",
-                "createdAt": "2016-09-12T15:39:49.243",
-                "updatedAt": "2016-09-12T15:39:58.523",
-                "partitionCount": 2,
-                "partitionIds": [
-                    "0",
-                    "1"
-                ]
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourcegroups/AppServiceTest/providers/Microsoft.EventHub/namespaces/appdiags/eventhubs/orderapp/consumergroups/$Default'.",
-            "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
-            "name": "[parameters('consumergroups_$Default_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "West Europe",
-            "properties": {
-                "createdAt": "2016-09-12T15:39:57.8375489",
-                "updatedAt": "2016-09-12T15:39:57.8375489"
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_name'))]",
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventhubs_orderapp_name'))]"
             ]
         },
         {

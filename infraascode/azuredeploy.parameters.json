@@ -41,16 +41,7 @@
         "AuthorizationRules_logicapp_name": {
             "value": null
         },
-        "eventhubs_orderapp_name": {
-            "value": null
-        },
-        "consumergroups_$Default_name": {
-            "value": null
-        },
         "accessKeys_default_name": {
-            "value": null
-        },
-        "alertrules_website_avaiability_resourceUri": {
             "value": null
         },
         "workflows_orderflow_connectionId": {
