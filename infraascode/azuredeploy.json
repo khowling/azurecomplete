@@ -4,7 +4,7 @@
     "parameters": {},
     "variables": {
         "databaseAccounts_name": "[concat(resourceGroup().name, 'DocDB')]",
-        "workflows_name": "[concat(resourceGroup().name, '-Logic')]",
+        "workflows_name": "[concat(resourceGroup().name, 'Logic')]",
         "storageAccounts_name": "[concat(resourceGroup().name, 'StoreDiag')]",
         "storageAccounts_function_name": "[concat(resourceGroup().name, 'StoreFunct')]",
         "storageAccounts_reports_name": "[concat(resourceGroup().name, 'StoreReports')]",
