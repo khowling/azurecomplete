@@ -3,13 +3,14 @@
     "contentVersion": "1.0.0.0",
     "parameters": {},
     "variables": {
-        "databaseAccounts_name": "[concat([resourceGroup().name, '-DocDB')]",
-        "workflows_name": "[concat([resourceGroup().name, '-Logic')]",
-        "storageAccounts_name": "[concat([resourceGroup().name, '-Store-Diag')]",
-        "storageAccounts_function_name": "[concat([resourceGroup().name, '-Store-Funct')]",
-        "storageAccounts_reports_name": "[concat([resourceGroup().name, '-Store-Reports')]",
-        "serverfarms_name":  "[concat([resourceGroup().name, '-AppServiceFarm')]",
-        "sites_function_name":  "[concat([resourceGroup().name, '-Functions')]"
+        "databaseAccounts_name": "[concat(resourceGroup().name, '-DocDB')]",
+        "workflows_name": "[concat(resourceGroup().name, '-Logic')]",
+        "storageAccounts_name": "[concat(resourceGroup().name, '-Store-Diag')]",
+        "storageAccounts_function_name": "[concat(resourceGroup().name, '-Store-Funct')]",
+        "storageAccounts_reports_name": "[concat(resourceGroup().name, '-Store-Reports')]",
+        "serverfarms_name":  "[concat(resourceGroup().name, '-AppServiceFarm')]",
+        "sites_function_name":  "[concat(resourceGroup().name, '-Functions')]",
+        "admin_website_name":  "[concat(resourceGroup().name, '-Web')]"
     },
     "resources": [
         {
@@ -147,6 +148,45 @@
                     },
                     {
                         "name": "[concat(variables('sites_function_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_name'))]"
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_name'))]"
+            ]
+        },
+                {
+            "comments": "Generalized from resource: '/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourceGroups/AppServiceTest/providers/Microsoft.Web/sites/admin-app'.",
+            "type": "Microsoft.Web/sites",
+            "name": "[variables('admin_website_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('serverfarms_name'))]": "empty"
+            },
+            "properties": {
+                "name": "[variables('admin_website_name')]",
+                "hostNames": [
+                    "[concat(variables('admin_website_name'),'.azurewebsites.net')]"
+                ],
+                "enabledHostNames": [
+                    "[concat(variables('admin_website_name'),'.azurewebsites.net')]",
+                    "[concat(variables('admin_website_name'),'.scm.azurewebsites.net')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(variables('admin_website_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(variables('admin_website_name'),'.scm.azurewebsites.net')]",
                         "sslState": 0,
                         "thumbprint": null,
                         "ipBasedSslState": 0
