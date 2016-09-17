@@ -1,64 +1,23 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "databaseAccounts_name": {
-            "defaultValue": "demodb01",
-            "type": "String"
-        },
-        "workflows_orderflow_name": {
-            "defaultValue": "orderflow",
-            "type": "String"
-        },
-        "storageAccounts_appdiags_name": {
-            "defaultValue": "appdiags",
-            "type": "String"
-        },
-        "storageAccounts_function_name": {
-            "defaultValue": "orderFunctionsStore",
-            "type": "String"
-        },
-        "storageAccounts_reportpdf_name": {
-            "defaultValue": "reportpdf",
-            "type": "String"
-        },
-        "serverfarms_DevPlan001_name": {
-            "defaultValue": "DevPlan001",
-            "type": "String"
-        },
-        "sites_function_name": {
-            "defaultValue": "orderFunctions",
-            "type": "String"
-        },
-        "AuthorizationRules_RootManageSharedAccessKey_name": {
-            "defaultValue": "appdiags/RootManageSharedAccessKey",
-            "type": "String"
-        },
-        "AuthorizationRules_logicapp_name": {
-            "defaultValue": "appdiags/logicapp",
-            "type": "String"
-        },
-        "accessKeys_default_name": {
-            "defaultValue": "orderflow/default",
-            "type": "String"
-        },
-        "workflows_orderflow_connectionId": {
-            "defaultValue": "[concat('/subscriptions/',subscription().subscriptionId)],'/resourceGroups/', resourceGroup().id, '/providers/Microsoft.Web/connections/', 'azureblob-2')]",
-            "type": "String"
-        },
-        "workflows_orderflow_connectionId_1": {
-            "defaultValue": "[concat('/subscriptions/',subscription().subscriptionId)],'/resourceGroups/', resourceGroup().id, '/providers/Microsoft.Web/connections/', 'office365-1')]",
-            "type": "String"
-        }
+    "parameters": {},
+    "variables": {
+        "databaseAccounts_name": "[concat([resourceGroup().name, '-DocDB')]",
+        "workflows_name": "[concat([resourceGroup().name, '-Logic')]",
+        "storageAccounts_name": "[concat([resourceGroup().name, '-Store-Diag')]",
+        "storageAccounts_function_name": "[concat([resourceGroup().name, '-Store-Funct')]",
+        "storageAccounts_reports_name": "[concat([resourceGroup().name, '-Store-Reports')]",
+        "serverfarms_name":  "[concat([resourceGroup().name, '-AppServiceFarm')]",
+        "sites_function_name":  "[concat([resourceGroup().name, '-Functions')]"
     },
-    "variables": {},
     "resources": [
         {
             "type": "Microsoft.DocumentDB/databaseAccounts",
             "kind": "GlobalDocumentDB",
-            "name": "[parameters('databaseAccounts_name')]",
+            "name": "[variables('databaseAccounts_name')]",
             "apiVersion": "2015-04-08",
-            "location": "West Europe",
+            "location": "[resourceGroup().location]",
             "tags": {},
             "properties": {
                 "databaseAccountOfferType": "Standard",
@@ -67,16 +26,16 @@
                     "maxIntervalInSeconds": 5,
                     "maxStalenessPrefix": 100
                 },
-                "name": "[parameters('databaseAccounts_name')]"
+                "name": "[variables('databaseAccounts_name')]"
             },
             "resources": [],
             "dependsOn": []
         },
         {
             "type": "Microsoft.Logic/workflows",
-            "name": "[parameters('workflows_orderflow_name')]",
+            "name": "[variables('workflows_name')]",
             "apiVersion": "2016-06-01",
-            "location": "westeurope",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "state": "Enabled",
                 "definition": {
@@ -91,7 +50,7 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_function_name'))]"
+                "[resourceId('Microsoft.Web/sites', variables('sites_function_name'))]"
             ]
         },
         {
@@ -101,9 +60,9 @@
                 "tier": "Standard"
             },
             "kind": "Storage",
-            "name": "[parameters('storageAccounts_appdiags_name')]",
+            "name": "[variables('storageAccounts_name')]",
             "apiVersion": "2016-01-01",
-            "location": "westeurope",
+            "location": "[resourceGroup().location]",
             "tags": {},
             "properties": {},
             "resources": [],
@@ -116,9 +75,9 @@
                 "tier": "Standard"
             },
             "kind": "Storage",
-            "name": "[parameters('storageAccounts_function_name')]",
+            "name": "[variables('storageAccounts_function_name')]",
             "apiVersion": "2016-01-01",
-            "location": "westeurope",
+            "location": "[resourceGroup().location]",
             "tags": {},
             "properties": {},
             "resources": [],
@@ -131,9 +90,9 @@
                 "tier": "Standard"
             },
             "kind": "BlobStorage",
-            "name": "[parameters('storageAccounts_reportpdf_name')]",
+            "name": "[variables('storageAccounts_reports_name')]",
             "apiVersion": "2016-01-01",
-            "location": "westeurope",
+            "location": "[resourceGroup().location]",
             "tags": {},
             "properties": {
                 "accessTier": "Hot"
@@ -151,11 +110,11 @@
                 "capacity": 1
             },
             "kind": "",
-            "name": "[parameters('serverfarms_DevPlan001_name')]",
+            "name": "[variables('serverfarms_name')]",
             "apiVersion": "2015-08-01",
-            "location": "West Europe",
+            "location": "[resourceGroup().location]",
             "properties": {
-                "name": "[parameters('serverfarms_DevPlan001_name')]",
+                "name": "[variables('serverfarms_name')]",
                 "numberOfWorkers": 1
             },
             "resources": [],
@@ -164,50 +123,40 @@
         {
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
-            "name": "[parameters('sites_function_name')]",
+            "name": "[variables('sites_function_name')]",
             "apiVersion": "2015-08-01",
-            "location": "West Europe",
+            "location": "[resourceGroup().location]",
             "tags": {
-                "hidden-related:/subscriptions/95efa97a-9b5d-4f74-9f75-a3396e23344d/resourcegroups/AppServiceTest/providers/Microsoft.Web/serverfarms/DevPlan001": "empty"
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('serverfarms_name'))]": "empty"
             },
             "properties": {
-                "name": "[parameters('sites_function_name')]",
+                "name": "[variables('sites_function_name')]",
                 "hostNames": [
-                    "[concat(parameters('sites_function_name'),'.azurewebsites.net')]"
+                    "[concat(variables('sites_function_name'),'.azurewebsites.net')]"
                 ],
                 "enabledHostNames": [
-                    "[concat(parameters('sites_function_name'),'.azurewebsites.net')]",
-                    "[concat(parameters('sites_function_name'),'.scm.azurewebsites.net')]"
+                    "[concat(variables('sites_function_name'),'.azurewebsites.net')]",
+                    "[concat(variables('sites_function_name'),'.scm.azurewebsites.net')]"
                 ],
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(parameters('sites_function_name'),'.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_function_name'),'.azurewebsites.net')]",
                         "sslState": 0,
                         "thumbprint": null,
                         "ipBasedSslState": 0
                     },
                     {
-                        "name": "[concat(parameters('sites_function_name'),'.scm.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_function_name'),'.scm.azurewebsites.net')]",
                         "sslState": 0,
                         "thumbprint": null,
                         "ipBasedSslState": 0
                     }
                 ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_DevPlan001_name'))]"
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_name'))]"
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_DevPlan001_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Logic/workflows/accessKeys",
-            "name": "[parameters('accessKeys_default_name')]",
-            "apiVersion": "2015-02-01-preview",
-            "properties": {},
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Logic/workflows', parameters('workflows_orderflow_name'))]"
+                "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_name'))]"
             ]
         }
     ]
