@@ -3,14 +3,14 @@
     "contentVersion": "1.0.0.0",
     "parameters": {},
     "variables": {
-        "databaseAccounts_name": "[concat(resourceGroup().name, '-DocDB')]",
+        "databaseAccounts_name": "[concat(resourceGroup().name, 'DocDB')]",
         "workflows_name": "[concat(resourceGroup().name, '-Logic')]",
-        "storageAccounts_name": "[concat(resourceGroup().name, '-Store-Diag')]",
-        "storageAccounts_function_name": "[concat(resourceGroup().name, '-Store-Funct')]",
-        "storageAccounts_reports_name": "[concat(resourceGroup().name, '-Store-Reports')]",
-        "serverfarms_name":  "[concat(resourceGroup().name, '-AppServiceFarm')]",
-        "sites_function_name":  "[concat(resourceGroup().name, '-Functions')]",
-        "admin_website_name":  "[concat(resourceGroup().name, '-Web')]"
+        "storageAccounts_name": "[concat(resourceGroup().name, 'StoreDiag')]",
+        "storageAccounts_function_name": "[concat(resourceGroup().name, 'StoreFunct')]",
+        "storageAccounts_reports_name": "[concat(resourceGroup().name, 'StoreReports')]",
+        "serverfarms_name":  "[concat(resourceGroup().name, 'AppFarm')]",
+        "sites_function_name":  "[concat(resourceGroup().name, 'Functions')]",
+        "admin_website_name":  "[concat(resourceGroup().name, 'Web')]"
     },
     "resources": [
         {
