@@ -3,14 +3,8 @@ var path = require('path');
 var util = require('util');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-
-//var pkg = require('./package.json');
-var port = '', //'3000', //pkg.config.devPort,
-    host = '', //'http://localhost', //pkg.config.devHost,
-    https = '', //pkg.config.devHttps,
-    target = './build', // pkg.config.buildDir,
-    version = '0.0.0.1', //pkg.version,
-    name =  'keith' // pkg.name
+var version = '0.0.0.1',
+    name =  'webapp' 
 
 var jsBundle = path.join('js', util.format('[name].%s.js', version));
 var fileLoader = 'file-loader?name=[path][name].[ext]';
@@ -30,7 +24,7 @@ module.exports = {
     entry:  {app: ['./app_index.jsx']},
     target: "web",
     output: {
-        path: path.resolve(target),
+        path: path.resolve('./_package/_static'),
         filename: jsBundle,
         publicPath: "/"
     },

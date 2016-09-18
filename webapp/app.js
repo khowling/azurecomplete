@@ -21,7 +21,7 @@ var app = express();
 //app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', express.static(__dirname + '/public'));
+app.use('/', express.static(__dirname + '/_static'));
 
 
 // This is requried if serving client app from react hot loader, and server from node (different ports)
